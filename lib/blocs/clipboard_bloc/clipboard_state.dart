@@ -35,3 +35,5 @@ class ClipBoardContentLoaded extends ClipBoardState {
 }
 
 class ClipBoardContentCreated extends ClipBoardState {}
+
+class ClipboardContentDeleted extends ClipBoardState {}

@@ -6,21 +6,40 @@ class ClipBoardRepo {
       FirebaseFirestore.instance.collection('clipboard');
 
   Future<List<ClipBoardContent>> getClipBoardContent() {
+    print("he;l;pp");
+    clipboardCollection
+        .get()
+        .then((value) => value.docs.map((e) => print("check this ${e.id}")));
     try {
-      return clipboardCollection.get().then((value) =>
-          value.docs.map((e) => ClipBoardContent.fromJson(e.data())).toList());
+      return clipboardCollection.get().then((value) => value.docs
+          .map((e) => ClipBoardContent.fromJson(e.data())..id = e.id)
+          .toList());
+    } catch (e) {
+      print(e.toString());
+      throw e.toString();
+    }
+  }
+
+  Future<void> createClipboardContent({
+    required String content,
+    required String type,
+  }) async {
+    try {
+      await clipboardCollection.add({
+        "content": content,
+        "type": type,
+        "createdAt": DateTime.now().toIso8601String(),
+      });
     } catch (e) {
       throw e.toString();
     }
   }
 
-  Future<void> createClipboardContent() async {
+  Future<void> deleteClipboard({
+    required String id,
+  }) async {
     try {
-      await clipboardCollection.add({
-        "content": "Hello world",
-        "type": "Text",
-        "createdAt": DateTime.now().toIso8601String(),
-      });
+      clipboardCollection.doc(id).delete();
     } catch (e) {
       throw e.toString();
     }

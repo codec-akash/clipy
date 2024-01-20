@@ -9,4 +9,18 @@ class ClipBoardEvent extends Equatable {
 
 class LoadClipBoardContent extends ClipBoardEvent {}
 
-class CreateClipboardContent extends ClipBoardEvent {}
+class CreateClipboardContent extends ClipBoardEvent {
+  final String content;
+  final String type;
+
+  const CreateClipboardContent({
+    required this.content,
+    required this.type,
+  });
+}
+
+class DeleteClipboardContent extends ClipBoardEvent {
+  final String id;
+
+  const DeleteClipboardContent({required this.id});
+}
