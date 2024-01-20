@@ -15,6 +15,9 @@ class ClipBoardBloc extends Bloc<ClipBoardEvent, ClipBoardState> {
     on<CreateClipboardContent>((event, emit) async {
       await _createClipboardContent(event, emit);
     });
+    on<DeleteClipboardContent>((event, emit) async {
+      await _deleteClipboardContent(event, emit);
+    });
   }
 
   Future<void> _loadClipboardContent(
@@ -33,8 +36,21 @@ class ClipBoardBloc extends Bloc<ClipBoardEvent, ClipBoardState> {
       CreateClipboardContent event, Emitter<ClipBoardState> emit) async {
     emit(ClipboardLoading(currentEvent: event));
     try {
-      await clipBoardRepo.createClipboardContent();
+      await clipBoardRepo.createClipboardContent(
+          content: event.content, type: event.type);
       emit(ClipBoardContentCreated());
+      add(LoadClipBoardContent());
+    } catch (e) {
+      emit(ClipBoardFailed(errorMsg: e.toString(), currentEvent: event));
+    }
+  }
+
+  Future<void> _deleteClipboardContent(
+      DeleteClipboardContent event, Emitter<ClipBoardState> emit) async {
+    emit(ClipboardLoading(currentEvent: event));
+    try {
+      await clipBoardRepo.deleteClipboard(id: event.id);
+      emit(ClipboardContentDeleted());
       add(LoadClipBoardContent());
     } catch (e) {
       emit(ClipBoardFailed(errorMsg: e.toString(), currentEvent: event));

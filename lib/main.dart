@@ -2,7 +2,7 @@ import 'package:clipy/blocs/clipboard_bloc/clipboard_bloc.dart';
 import 'package:clipy/blocs/login_bloc/login_bloc.dart';
 import 'package:clipy/env/env.dart';
 import 'package:clipy/repo/auth_repo.dart';
-import 'package:clipy/screens/home_screen.dart/home_page.dart';
+import 'package:clipy/screens/home_screen/home_page.dart';
 import 'package:clipy/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 context.read<LoginBloc>().add(Logout());
               },
-              child: Text("logout"),
+              child: const Text("logout"),
             )
           ],
         ),

@@ -1,9 +1,11 @@
 class ClipBoardContent {
+  late String id;
   late String createdAt;
   late String content;
   late String type;
 
   ClipBoardContent({
+    required this.id,
     required this.createdAt,
     required this.content,
     required this.type,
