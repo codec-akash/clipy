@@ -50,7 +50,9 @@ class _HomePageState extends State<HomePage> {
                   }
                 }
                 if (state is ClipBoardContentCreated) {
-                  print("Wohooo");
+                  setState(() {
+                    textEditingController.clear();
+                  });
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text("created")));
                 }
