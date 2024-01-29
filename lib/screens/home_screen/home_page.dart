@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         Text(
-                          "Logged in as -",
+                          "Logged in as testing deploy -",
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(width: 10),

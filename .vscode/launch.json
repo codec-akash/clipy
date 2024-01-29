@@ -26,6 +26,12 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "clipy phone",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug"
         }
     ]
 }
