@@ -44,6 +44,11 @@ class _HomePageState extends State<HomePage> {
                     clipboardContents = state.clipboardContent;
                   });
                 }
+                if (state is ClipboardContentUpdated) {
+                  setState(() {
+                    clipboardContents = state.clipBoardContent;
+                  });
+                }
                 if (state is ClipBoardFailed) {
                   if (state.currentEvent is DeleteClipboardContent) {
                     context.showSnackBar(state.errorMsg);

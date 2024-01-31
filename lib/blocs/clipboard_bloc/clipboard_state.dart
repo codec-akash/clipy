@@ -37,3 +37,9 @@ class ClipBoardContentLoaded extends ClipBoardState {
 class ClipBoardContentCreated extends ClipBoardState {}
 
 class ClipboardContentDeleted extends ClipBoardState {}
+
+class ClipboardContentUpdated extends ClipBoardState {
+  final List<ClipBoardContent> clipBoardContent;
+
+  const ClipboardContentUpdated({required this.clipBoardContent});
+}
