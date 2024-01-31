@@ -24,3 +24,9 @@ class DeleteClipboardContent extends ClipBoardEvent {
 
   const DeleteClipboardContent({required this.id});
 }
+
+class UpdateClipBoardContent extends ClipBoardEvent {
+  final List<ClipBoardContent> clipBoardContent;
+
+  const UpdateClipBoardContent({required this.clipBoardContent});
+}
