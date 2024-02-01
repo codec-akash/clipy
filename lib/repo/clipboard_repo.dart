@@ -1,6 +1,7 @@
 import 'package:clipy/model/clipboard_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class ClipBoardRepo {
   final clipboardCollection =
@@ -15,7 +16,7 @@ class ClipBoardRepo {
               .map((e) => ClipBoardContent.fromJson(e.data())..id = e.id)
               .toList());
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       throw e.toString();
     }
   }
