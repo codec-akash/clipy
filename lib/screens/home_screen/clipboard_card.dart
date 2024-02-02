@@ -29,7 +29,7 @@ class _ClipboardCardState extends State<ClipboardCard> {
       ),
       child: Row(
         children: [
-          Expanded(child: Text(widget.clipBoardContent.content)),
+          Expanded(child: SelectableText(widget.clipBoardContent.content)),
           IconButton(
             onPressed: () async {
               await Clipboard.setData(
