@@ -24,7 +24,8 @@ class ClipBoardRepo {
   Stream<QuerySnapshot> getContentStream() {
     return clipboardCollection
         .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .snapshots(includeMetadataChanges: true);
+        .snapshots(includeMetadataChanges: true)
+        .asBroadcastStream();
   }
 
   Future<void> createClipboardContent({
