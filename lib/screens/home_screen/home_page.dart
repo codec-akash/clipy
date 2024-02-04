@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                     clipboardContents = state.clipboardContent;
                   });
                 }
-                if (state is ClipboardContentUpdated) {
+                if (state is UpdatedClipboardContentLoaded) {
                   setState(() {
                     clipboardContents = state.clipBoardContent;
                   });

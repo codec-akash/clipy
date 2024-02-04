@@ -38,8 +38,14 @@ class ClipBoardContentCreated extends ClipBoardState {}
 
 class ClipboardContentDeleted extends ClipBoardState {}
 
-class ClipboardContentUpdated extends ClipBoardState {
+class UpdatedClipboardContentLoaded extends ClipBoardState {
   final List<ClipBoardContent> clipBoardContent;
 
-  const ClipboardContentUpdated({required this.clipBoardContent});
+  const UpdatedClipboardContentLoaded({required this.clipBoardContent});
+}
+
+class ClipboardContentUpdated extends ClipBoardState {
+  final String contentId;
+
+  const ClipboardContentUpdated({required this.contentId});
 }
