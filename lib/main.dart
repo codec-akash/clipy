@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
         textTheme:
             GoogleFonts.oldStandardTtTextTheme(Typography.whiteCupertino),
         primaryColor: const Color(0xff307477),
+        secondaryHeaderColor: const Color(0xffF6F740),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xff18302e),
         ),

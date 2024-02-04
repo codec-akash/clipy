@@ -44,6 +44,18 @@ class ClipBoardRepo {
     }
   }
 
+  Future<void> updateClipBoardContent(String content, String contentId) async {
+    try {
+      await clipboardCollection
+          .doc(contentId)
+          .update({"content": content})
+          .then((_) => print("success"))
+          .catchError((e) => throw e);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   Future<void> deleteClipboard({
     required String id,
   }) async {

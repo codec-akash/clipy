@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:clipy/model/clipboard_model.dart';
 import 'package:clipy/repo/clipboard_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'clipboard_state.dart';
@@ -19,7 +17,7 @@ class ClipBoardBloc extends Bloc<ClipBoardEvent, ClipBoardState> {
   ClipBoardBloc() : super(Uninitialized()) {
     _subscription = clipBoardRepo.getContentStream().listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
-        add(UpdateClipBoardContent(
+        add(GetUpdatedClipBoardContent(
             clipBoardContent: snapshot.docs
                 .map((e) =>
                     ClipBoardContent.fromJson(e.data() as Map<String, dynamic>)
@@ -37,10 +35,12 @@ class ClipBoardBloc extends Bloc<ClipBoardEvent, ClipBoardState> {
     on<DeleteClipboardContent>((event, emit) async {
       await _deleteClipboardContent(event, emit);
     });
-    on<UpdateClipBoardContent>((event, emit) {
+    on<GetUpdatedClipBoardContent>((event, emit) {
       emit(ClipboardLoading(currentEvent: event));
-      emit(ClipboardContentUpdated(clipBoardContent: event.clipBoardContent));
+      emit(UpdatedClipboardContentLoaded(
+          clipBoardContent: event.clipBoardContent));
     });
+    on<UpdateClipboardContent>(_updateClipboardContent);
   }
 
   Future<void> _loadClipboardContent(
@@ -75,6 +75,18 @@ class ClipBoardBloc extends Bloc<ClipBoardEvent, ClipBoardState> {
       await clipBoardRepo.deleteClipboard(id: event.id);
       emit(ClipboardContentDeleted());
       add(LoadClipBoardContent());
+    } catch (e) {
+      emit(ClipBoardFailed(errorMsg: e.toString(), currentEvent: event));
+    }
+  }
+
+  Future<void> _updateClipboardContent(
+      UpdateClipboardContent event, Emitter<ClipBoardState> emit) async {
+    emit(ClipboardLoading(currentEvent: event));
+    try {
+      await clipBoardRepo.updateClipBoardContent(
+          event.content, event.contentId);
+      emit(ClipboardContentUpdated(contentId: event.contentId));
     } catch (e) {
       emit(ClipBoardFailed(errorMsg: e.toString(), currentEvent: event));
     }
