@@ -29,126 +29,133 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home page"),
-      ),
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
-        child: CustomScrollView(
-          slivers: [
-            BlocListener<ClipBoardBloc, ClipBoardState>(
-              listener: (context, state) {
-                if (state is ClipBoardContentLoaded) {
-                  setState(() {
-                    clipboardContents = state.clipboardContent;
-                  });
-                }
-                if (state is UpdatedClipboardContentLoaded) {
-                  setState(() {
-                    clipboardContents = state.clipBoardContent;
-                  });
-                }
-                if (state is ClipBoardFailed) {
-                  if (state.currentEvent is DeleteClipboardContent) {
-                    context.showSnackBar(state.errorMsg);
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<ClipBoardBloc>().add(LoadClipBoardContent());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Your Clipboard"),
+        ),
+        body: Container(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
+          child: CustomScrollView(
+            slivers: [
+              BlocListener<ClipBoardBloc, ClipBoardState>(
+                listener: (context, state) {
+                  if (state is ClipBoardContentLoaded) {
+                    setState(() {
+                      clipboardContents = state.clipboardContent;
+                    });
                   }
-                }
-                if (state is ClipBoardContentCreated) {
-                  setState(() {
-                    textEditingController.clear();
-                  });
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text("created")));
-                }
-              },
-              child: SliverToBoxAdapter(child: Container()),
-            ),
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (userDetials.displayName != null) ...[
+                  if (state is UpdatedClipboardContentLoaded) {
+                    setState(() {
+                      clipboardContents = state.clipBoardContent;
+                    });
+                  }
+                  if (state is ClipBoardFailed) {
+                    if (state.currentEvent is DeleteClipboardContent) {
+                      context.showSnackBar(state.errorMsg);
+                    }
+                  }
+                  if (state is ClipBoardContentCreated) {
+                    setState(() {
+                      textEditingController.clear();
+                    });
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text("created")));
+                  }
+                },
+                child: SliverToBoxAdapter(child: Container()),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (userDetials.displayName != null) ...[
+                      Row(
+                        children: [
+                          Text(
+                            "Logged in as -",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(userDetials.displayName!),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              context.read<LoginBloc>().add(Logout());
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Theme.of(context).primaryColor),
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: const Text("Logout"),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                          color: Colors.white.withOpacity(0.3), height: 1),
+                    ],
+                    const SizedBox(height: 20),
                     Row(
                       children: [
-                        Text(
-                          "Logged in as -",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                        Expanded(
+                          child: TextField(
+                            controller: textEditingController,
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.only(
+                                  bottom: 0, left: 10, right: 20),
+                              hintText: "Enter the text for clipboard",
+                              hintStyle: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
                         ),
-                        const SizedBox(width: 10),
-                        Text(userDetials.displayName!),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            context.read<LoginBloc>().add(Logout());
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Theme.of(context).primaryColor),
-                                borderRadius: BorderRadius.circular(8)),
-                            child: const Text("Logout"),
+                        DisableWidget(
+                          isDisable: textEditingController.text.isEmpty,
+                          child: GestureDetector(
+                            onTap: () {
+                              context.read<ClipBoardBloc>().add(
+                                  CreateClipboardContent(
+                                      content: textEditingController.text,
+                                      type: "text"));
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Text("Add"),
+                            ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Container(color: Colors.white.withOpacity(0.3), height: 1),
+                    Column(
+                      children: clipboardContents
+                          .map((clipboard) =>
+                              ClipboardCard(clipBoardContent: clipboard))
+                          .toList(),
+                    ),
                   ],
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: textEditingController,
-                          onChanged: (value) {
-                            setState(() {});
-                          },
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.only(
-                                bottom: 0, left: 10, right: 20),
-                            hintText: "Enter the text for clipboard",
-                            hintStyle: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ),
-                      ),
-                      DisableWidget(
-                        isDisable: textEditingController.text.isEmpty,
-                        child: GestureDetector(
-                          onTap: () {
-                            context.read<ClipBoardBloc>().add(
-                                CreateClipboardContent(
-                                    content: textEditingController.text,
-                                    type: "text"));
-                          },
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            margin: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Text("Add"),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Column(
-                    children: clipboardContents
-                        .map((clipboard) =>
-                            ClipboardCard(clipBoardContent: clipboard))
-                        .toList(),
-                  ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
