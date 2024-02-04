@@ -2,6 +2,7 @@ import 'package:clipy/blocs/clipboard_bloc/clipboard_bloc.dart';
 import 'package:clipy/model/clipboard_model.dart';
 import 'package:clipy/utils/date_time.dart';
 import 'package:clipy/utils/extension_function.dart';
+import 'package:clipy/widgets/show_more_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,6 +70,7 @@ class _ClipboardCardState extends State<ClipboardCard> {
                     child: TextField(controller: contentController),
                   ),
                   IconButton(
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       if (contentController.text ==
                           widget.clipBoardContent.content) {
@@ -94,10 +96,12 @@ class _ClipboardCardState extends State<ClipboardCard> {
                     child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: isEditOn ? 0.4 : 1.0,
-                  child: SelectableText(widget.clipBoardContent.content),
+                  // child: SelectableText(widget.clipBoardContent.content),
+                  child: ShowMoreText(text: widget.clipBoardContent.content),
                 )),
                 if (!isEditOn) ...[
                   IconButton(
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       setState(() {
                         contentController.text =
@@ -109,6 +113,7 @@ class _ClipboardCardState extends State<ClipboardCard> {
                   ),
                 ],
                 IconButton(
+                  padding: EdgeInsets.zero,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: widget.clipBoardContent.content));
@@ -120,6 +125,7 @@ class _ClipboardCardState extends State<ClipboardCard> {
                   icon: const Icon(Icons.copy_outlined),
                 ),
                 IconButton(
+                  padding: EdgeInsets.zero,
                   onPressed: () async {
                     context.read<ClipBoardBloc>().add(
                         DeleteClipboardContent(id: widget.clipBoardContent.id));
