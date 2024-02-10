@@ -11,6 +11,7 @@ class ClipBoardRepo {
     try {
       return clipboardCollection
           .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .orderBy("createdAt", descending: true)
           .get()
           .then((value) => value.docs
               .map((e) => ClipBoardContent.fromJson(e.data())..id = e.id)
@@ -24,6 +25,7 @@ class ClipBoardRepo {
   Stream<QuerySnapshot> getContentStream() {
     return clipboardCollection
         .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy("createdAt", descending: true)
         .snapshots(includeMetadataChanges: true)
         .asBroadcastStream();
   }

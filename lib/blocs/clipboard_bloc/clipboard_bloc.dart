@@ -18,11 +18,12 @@ class ClipBoardBloc extends Bloc<ClipBoardEvent, ClipBoardState> {
     _subscription = clipBoardRepo.getContentStream().listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         add(GetUpdatedClipBoardContent(
-            clipBoardContent: snapshot.docs
-                .map((e) =>
-                    ClipBoardContent.fromJson(e.data() as Map<String, dynamic>)
-                      ..id = e.id)
-                .toList()));
+          clipBoardContent: snapshot.docs
+              .map((e) =>
+                  ClipBoardContent.fromJson(e.data() as Map<String, dynamic>)
+                    ..id = e.id)
+              .toList(),
+        ));
       }
     });
 
