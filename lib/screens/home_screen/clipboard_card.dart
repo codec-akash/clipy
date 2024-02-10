@@ -97,17 +97,16 @@ class _ClipboardCardState extends State<ClipboardCard> {
             const SizedBox(height: 5),
             Row(
               children: [
-                Text(
-                  DateTimeUtil.dayDateMonthFormat(
-                      DateTime.parse(widget.clipBoardContent.createdAt)
-                          .toLocal()),
-                  textAlign: TextAlign.left,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelSmall!
-                      .copyWith(color: Theme.of(context).secondaryHeaderColor),
+                Expanded(
+                  child: Text(
+                    DateTimeUtil.dayDateMonthFormat(
+                        DateTime.parse(widget.clipBoardContent.createdAt)
+                            .toLocal()),
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: Theme.of(context).secondaryHeaderColor),
+                  ),
                 ),
-                const Spacer(),
                 if (!isEditOn) ...[
                   IconButton(
                     padding: EdgeInsets.zero,
