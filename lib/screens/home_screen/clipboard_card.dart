@@ -2,7 +2,6 @@ import 'package:clipy/blocs/clipboard_bloc/clipboard_bloc.dart';
 import 'package:clipy/model/clipboard_model.dart';
 import 'package:clipy/utils/date_time.dart';
 import 'package:clipy/utils/extension_function.dart';
-import 'package:clipy/widgets/show_more_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +35,7 @@ class _ClipboardCardState extends State<ClipboardCard> {
       ),
       child: AnimatedSize(
         duration: const Duration(milliseconds: 400),
+        alignment: Alignment.topCenter,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -90,15 +90,24 @@ class _ClipboardCardState extends State<ClipboardCard> {
               ),
               const SizedBox(height: 10),
             ],
+            AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: isEditOn ? 0.4 : 1.0,
+                child: SelectableText(widget.clipBoardContent.content)),
+            const SizedBox(height: 5),
             Row(
               children: [
-                Expanded(
-                    child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: isEditOn ? 0.4 : 1.0,
-                  // child: SelectableText(widget.clipBoardContent.content),
-                  child: ShowMoreText(text: widget.clipBoardContent.content),
-                )),
+                Text(
+                  DateTimeUtil.dayDateMonthFormat(
+                      DateTime.parse(widget.clipBoardContent.createdAt)
+                          .toLocal()),
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall!
+                      .copyWith(color: Theme.of(context).secondaryHeaderColor),
+                ),
+                const Spacer(),
                 if (!isEditOn) ...[
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -109,7 +118,10 @@ class _ClipboardCardState extends State<ClipboardCard> {
                         isEditOn = true;
                       });
                     },
-                    icon: const Icon(Icons.mode_edit_outlined),
+                    icon: const Icon(
+                      Icons.mode_edit_outlined,
+                      size: 16,
+                    ),
                   ),
                 ],
                 IconButton(
@@ -122,7 +134,10 @@ class _ClipboardCardState extends State<ClipboardCard> {
                           const SnackBar(content: Text("content clipboard")));
                     }
                   },
-                  icon: const Icon(Icons.copy_outlined),
+                  icon: const Icon(
+                    Icons.copy_outlined,
+                    size: 16,
+                  ),
                 ),
                 IconButton(
                   padding: EdgeInsets.zero,
@@ -132,20 +147,11 @@ class _ClipboardCardState extends State<ClipboardCard> {
                   },
                   icon: Icon(
                     Icons.delete_outline_outlined,
+                    size: 16,
                     color: Colors.redAccent.withOpacity(0.7),
                   ),
                 )
               ],
-            ),
-            const SizedBox(height: 5),
-            Text(
-              DateTimeUtil.dayDateMonthFormat(
-                  DateTime.parse(widget.clipBoardContent.createdAt).toLocal()),
-              textAlign: TextAlign.left,
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall!
-                  .copyWith(color: Theme.of(context).secondaryHeaderColor),
             ),
           ],
         ),
