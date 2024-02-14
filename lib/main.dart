@@ -2,6 +2,7 @@ import 'package:clipy/blocs/clipboard_bloc/clipboard_bloc.dart';
 import 'package:clipy/blocs/login_bloc/login_bloc.dart';
 import 'package:clipy/env/env.dart';
 import 'package:clipy/repo/auth_repo.dart';
+import 'package:clipy/repo/firebase_api.dart';
 import 'package:clipy/screens/home_screen/home_page.dart';
 import 'package:clipy/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
       authDomain: Env.authDomain,
     ),
   );
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
