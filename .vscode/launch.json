@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "clipy",
+            "name": "clipy_web",
             "request": "launch",
             "type": "dart",
             "args": [

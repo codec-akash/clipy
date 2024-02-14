@@ -33,6 +33,7 @@ migrate_working_dir/
 /build/
 /lib/env
 .firebase
+/android/app/google-services.json
 
 # Symbolication related
 app.*.symbols

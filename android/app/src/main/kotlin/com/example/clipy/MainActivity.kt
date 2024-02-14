@@ -1,4 +1,4 @@
-package com.example.clipy
+package com.crickash.clipy
 
 import io.flutter.embedding.android.FlutterActivity
 
